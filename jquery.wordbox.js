@@ -54,8 +54,8 @@
 
             this.fontSize = opts.fontSize ? opts.fontSize : $element.css("fontSize");
 
-            this._fillRect(this.$element, this.words, opts);
-       
+            this._fillRect(this.$element, this.words, 0,15);
+            //this._zxFillRect(this.$element, this.words,0,15);
             return true;
         },
 
@@ -78,8 +78,24 @@
             }
         },
 
+        _zxFillRect: function(wrapper,words,left,right)
+		{
+			html += this._createBox({width: 200, height: 100, top: 0, left: 0, word: "ddd", color: this._getNextColor(), borderR: true});
+			$(wrapper).html(html);
+			alert("dd");
+		},
 
-        _fillRect: function(wrapper, words) {
+        _fillRect: function(wrapper, words,left,right) {
+	
+			html += this._createBox({width: 200, height: 100, top: 0, left: 0, word: "rex", color: this._getNextColor(), borderR: true});
+			$(wrapper).html(html);
+			
+			
+			alert(this._separator(0,10));
+			
+			
+			
+			return;
             var num = words.length,
                 wrapperW = $(wrapper).width(),
                 wrapperH = $(wrapper).height(),
@@ -215,6 +231,21 @@
                 max = center * (1 + round),
                 rand = Math.random() * (max - min) + min;
             return [rand].concat(this._randRange(num - 1, base - rand, round));
+        },
+
+        _separator: function(left, right) {        
+		
+            if(left == right) 
+			{
+			   return left;
+			}
+			else
+			{
+				var result = parseInt(Math.random() * (right - left)+ left);
+				if(result == left) result ++;
+				if(result == right) result --;
+				return result;
+			}
         }
     };
 
