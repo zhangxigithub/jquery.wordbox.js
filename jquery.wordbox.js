@@ -58,12 +58,13 @@
                            this.words,
                            0,
                            this.words.length,
-                           this.$element.width,
-                           this.$element.height,
-                           this.$element.top,
-                           this.$element.left);
+						   0,
+						   0,
+                           parseFloat(this.$element.css("width")),
+                           parseFloat(this.$element.css("height"))
+                           );
 
-            //this._zxFillRect(this.$element, this.words,0,15);
+            //this._fillRect(this.$element, this.words,0,15);
             return true;
         },
 
@@ -88,42 +89,34 @@
 
      
 
-        _fillRect: function(wrapper, words,left,right,width,height,top,x) {
-	        
-			
-            
-
+        _fillRect: function(wrapper, words,left,right,x,y,width,height) {
 
             if(right-left == 1)
             {
-                html += this._createBox({width: width,
+                var div = this._createBox({width: width,
                                         height: height,
-                                           top: top,
+                                           top: y,
                                           left: x,
-                                          word: {"title":"rex"},
+                                          word: {"title":right},
                                          color: this._getNextColor(),
                                        borderR: true});
-                $(wrapper).append(html);
+									   
+                $(wrapper).append(div);
 
             }else if(left == right)
             {
-                return;
+				return;
             }else
             {
                 var separator = this._separator(left,right);
-                var num = words.length,
-                    wrapperW = $(wrapper).width(),
-                    wrapperH = $(wrapper).height(),
-                    ratio = wrapperW / wrapperH;
+
+                var ratio = width/height;
+
 
                 var vertical = !(ratio >=2.5);
 
-
-
-
-
                 if(vertical){
-
+					
                 var leftValue = (separator-left)/(right-left)*height;
                 var rightValue = (right-separator)/(right-left)*height;
 
@@ -131,25 +124,22 @@
                                words,
                                left,
                                separator,
+							   x,
+							   y,
                                width,
-                               leftValue,
-                               top,
-                               x);
+                               leftValue);
 
                 this._fillRect(wrapper,
                                words,
-                               left,
                                separator,
-                               width,
-                               rightValue,
-                               leftValue,
-                               x);
+                               right,
+                               x,
+							   leftValue,
+							   width,
+                               rightValue);
 
-
-
-                //this._fillRect(wrapper,words,separator,right,wrapper.width,wrapper.height,wrapper.top,wrapper.left);
                 }else
-                {
+				{
                 var leftValue = (separator-left)/(right-left)*width;
                 var rightValue = (right-separator)/(right-left)*width;
 
@@ -157,115 +147,23 @@
                                words,
                                left,
                                separator,
+							   x,
+							   y,
                                leftValue,
-                               height,
-                               top,
-                               x);
+                               height);
 
                 this._fillRect(wrapper,
                                words,
-                               left,
                                separator,
                                right,
-                               height,
-                               top,
-                               leftValue);
+							   leftValue,
+							   y,
+                               rightValue,
+                               height);
 
                 }
-
-
-                //this._fillRect(wrapper,words,left,separator,wrapper.width,wrapper.height,wrapper.top,wrapper.left);
-                //this._fillRect(wrapper,words,separator,right,wrapper.width,wrapper.height,wrapper.top,wrapper.left);
             }
 
-
-			//alert(this._separator(0,10));
-			
-			
-			
-			return;
-            var num = words.length,
-                wrapperW = $(wrapper).width(),
-                wrapperH = $(wrapper).height(),
-                ratio = wrapperW / wrapperH;
-
-            if(num == 0) {
-                return;
-            } else if(num == 1) {
-                $(wrapper).html(createBox({width: wrapperW, height: wrapperH, top: 0, left: 0, word: words[0], color: this._getNextColor()}));
-            } else if(ratio >= 2.5) {
-                var randCol = this._randRange(2, 1, 0.5),
-                    leftNum = Math.round(randCol[0] * num),
-                    rightNum = num - leftNum,
-                    leftWidth = Math.round(wrapperW * randCol[0]),                    
-                    rightWidth = wrapperW - leftWidth,
-                    html = '';
-
-                if(leftNum == 0) {
-                    leftNum = 1;
-                    rightNum--;
-                } else if(rightNum == 0) {
-                    rightNum = 1;
-                    leftNum--;
-                }
-
-                if(leftNum == 1) {
-                    html += this._createBox({width: leftWidth, height: wrapperH, top: 0, left: 0, word: words[0], color: this._getNextColor(), borderR: true});
-                } else {
-                    html += this._createBox({width: leftWidth, height: wrapperH, top: 0, left: 0, word: '', borderR: true});
-                }
-                if(rightNum == 1) {
-                    html += this._createBox({width: rightWidth, height: wrapperH, top: 0, left: leftWidth, word: words[num - 1], color: this._getNextColor()});
-                } else {
-                    html += this._createBox({width: rightWidth, height: wrapperH, top: 0, left: leftWidth, word: ''});
-                }
-                $(wrapper).html(html);
-
-                if(leftNum > 1) {
-                    var leftDiv = $(wrapper).children('div')[0];
-                    this._fillRect(leftDiv, words.slice(0, leftNum));
-                }
-                if(rightNum > 1) {
-                    var rightDiv = $(wrapper).children('div')[1];
-                    this._fillRect(rightDiv, words.slice(leftNum));
-                }
-            } else {
-                var randRow = this._randRange(2, 1, 0.5),
-                    topNum = Math.round(randRow[0] * num),
-                    bottomNum = num - topNum,
-                    topHeight = Math.round(wrapperH * randRow[0]),
-                    bottomHeight = wrapperH - topHeight,
-                    html = '';
-
-                if(topNum == 0) {
-                    topNum = 1;
-                    bottomNum--;
-                } else if(bottomNum == 0) {
-                    bottomNum = 1;
-                    topNum--;
-                }
-
-                if(topNum == 1) {
-                    html += this._createBox({width: wrapperW, height: topHeight, top: 0, left: 0, word: words[0], color: this._getNextColor(), borderB: true});
-                } else {
-                    html += this._createBox({width: wrapperW, height: topHeight, top: 0, left: 0, word: '', borderB: true});
-                }
-                if(bottomNum == 1) {
-                    html += this._createBox({width: wrapperW, height: bottomHeight, top: topHeight, left: 0, word: words[num - 1], color: this._getNextColor()});
-                } else {
-                    html += this._createBox({width: wrapperW, height: bottomHeight, top: topHeight, left: 0, word: ''});
-                }
-                $(wrapper).html(html);
-
-                if(topNum > 1) {
-                    var topDiv = $(wrapper).children('div')[0];
-                    this._fillRect(topDiv, words.slice(0, topNum));
-                }
-                if(bottomNum > 1) {
-                    var bottomDiv = $(wrapper).children('div')[1];
-                    this._fillRect(bottomDiv, words.slice(topNum));
-                }
-            }
         },
 
         _getNextColor: function() {
