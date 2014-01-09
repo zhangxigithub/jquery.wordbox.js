@@ -56,7 +56,7 @@
 
             this._fillRect(this.$element,
                            this.words,
-                           0,
+                           1,
                            this.words.length,
 						   0,
 						   0,
@@ -97,7 +97,7 @@
                                         height: height,
                                            top: y,
                                           left: x,
-                                          word: {"title":right},
+                                          word: {"title":left},
                                          color: this._getNextColor(),
                                        borderR: true});
 									   
@@ -134,7 +134,7 @@
                                separator,
                                right,
                                x,
-							   leftValue,
+							   y+leftValue,
 							   width,
                                rightValue);
 
@@ -156,7 +156,7 @@
                                words,
                                separator,
                                right,
-							   leftValue,
+							   x+leftValue,
 							   y,
                                rightValue,
                                height);
