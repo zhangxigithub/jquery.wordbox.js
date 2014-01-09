@@ -54,7 +54,15 @@
 
             this.fontSize = opts.fontSize ? opts.fontSize : $element.css("fontSize");
 
-            this._fillRect(this.$element, this.words, 0,15);
+            this._fillRect(this.$element,
+                           this.words,
+                           0,
+                           this.words.length,
+                           this.$element.width,
+                           this.$element.height,
+                           this.$element.top,
+                           this.$element.left);
+
             //this._zxFillRect(this.$element, this.words,0,15);
             return true;
         },
@@ -78,20 +86,100 @@
             }
         },
 
-        _zxFillRect: function(wrapper,words,left,right)
-		{
-			html += this._createBox({width: 200, height: 100, top: 0, left: 0, word: "ddd", color: this._getNextColor(), borderR: true});
-			$(wrapper).html(html);
-			alert("dd");
-		},
+     
 
-        _fillRect: function(wrapper, words,left,right) {
-	
-			html += this._createBox({width: 200, height: 100, top: 0, left: 0, word: "rex", color: this._getNextColor(), borderR: true});
-			$(wrapper).html(html);
+        _fillRect: function(wrapper, words,left,right,width,height,top,x) {
+	        
 			
-			
-			alert(this._separator(0,10));
+            
+
+
+            if(right-left == 1)
+            {
+                html += this._createBox({width: width,
+                                        height: height,
+                                           top: top,
+                                          left: x,
+                                          word: {"title":"rex"},
+                                         color: this._getNextColor(),
+                                       borderR: true});
+                $(wrapper).append(html);
+
+            }else if(left == right)
+            {
+                return;
+            }else
+            {
+                var separator = this._separator(left,right);
+                var num = words.length,
+                    wrapperW = $(wrapper).width(),
+                    wrapperH = $(wrapper).height(),
+                    ratio = wrapperW / wrapperH;
+
+                var vertical = !(ratio >=2.5);
+
+
+
+
+
+                if(vertical){
+
+                var leftValue = (separator-left)/(right-left)*height;
+                var rightValue = (right-separator)/(right-left)*height;
+
+                this._fillRect(wrapper,
+                               words,
+                               left,
+                               separator,
+                               width,
+                               leftValue,
+                               top,
+                               x);
+
+                this._fillRect(wrapper,
+                               words,
+                               left,
+                               separator,
+                               width,
+                               rightValue,
+                               leftValue,
+                               x);
+
+
+
+                //this._fillRect(wrapper,words,separator,right,wrapper.width,wrapper.height,wrapper.top,wrapper.left);
+                }else
+                {
+                var leftValue = (separator-left)/(right-left)*width;
+                var rightValue = (right-separator)/(right-left)*width;
+
+                this._fillRect(wrapper,
+                               words,
+                               left,
+                               separator,
+                               leftValue,
+                               height,
+                               top,
+                               x);
+
+                this._fillRect(wrapper,
+                               words,
+                               left,
+                               separator,
+                               right,
+                               height,
+                               top,
+                               leftValue);
+
+                }
+
+
+                //this._fillRect(wrapper,words,left,separator,wrapper.width,wrapper.height,wrapper.top,wrapper.left);
+                //this._fillRect(wrapper,words,separator,right,wrapper.width,wrapper.height,wrapper.top,wrapper.left);
+            }
+
+
+			//alert(this._separator(0,10));
 			
 			
 			
